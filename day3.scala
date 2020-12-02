@@ -1,5 +1,3 @@
-package main
-
 object values{
-  val x = "x"
+  val x = "value x"
 }
