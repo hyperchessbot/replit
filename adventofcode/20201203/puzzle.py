@@ -34,8 +34,7 @@ for input in ["inputsmall.txt", "input.txt"]:
 
       line = lines[pos.y]
     
-      if line[pos.x % len(line)] == "#":
-        hit_tree += 1
+      hit_tree += int(line[pos.x % len(line)] == "#")
 
     prod *= hit_tree
 
