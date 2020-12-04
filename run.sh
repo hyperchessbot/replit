@@ -1,3 +1,3 @@
-cd adventofcode/20201204
+cd adventofcode/20201205
 
-python puzzle.py > log
+bash run.sh
