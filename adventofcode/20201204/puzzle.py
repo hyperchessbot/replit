@@ -65,7 +65,7 @@ def is_field_valid(field):
 def is_valid(passport):  
   return not bool(req_fields.difference({item.split(":")[0] for item in filter(is_field_valid, re.split(" |\n", passport))}))
 
-for input in ["inputsmall.txt", "input.txt"]:
+for input in ["inputcheck.txt"]:
 
   with open(input) as file:
     passports = file.read().split("\n\n")
