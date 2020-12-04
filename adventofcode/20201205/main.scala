@@ -1,7 +1,5 @@
-object Main {
+object Main extends App {
   val inputs = scala.io.Source.fromFile("inputsmall.txt").getLines.toList
 
-  def main(args: Array[String]): Unit = {
-    println(inputs)
-  }
+  println(inputs)
 }
