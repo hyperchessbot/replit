@@ -1,3 +1,3 @@
-cd adventofcode/20201203
+cd adventofcode/20201204
 
-python puzzle.py
+python puzzle.py > log
