@@ -1,5 +1,14 @@
-object Main extends App {
-  val inputs = scala.io.Source.fromFile("inputsmall.txt").getLines.toList
+import scala.util.chaining._
 
-  println(inputs)
+object Main extends App {
+  val inputs = scala.io.Source.fromFile("input.txt").getLines.toList
+
+  inputs
+    .map(_
+      .replaceAll("B|R", "1")
+      .replaceAll("F|L", "0")
+    )
+    .map(Integer.parseInt(_, 2))
+    .max
+    .tap(println)
 }
