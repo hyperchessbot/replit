@@ -11,6 +11,6 @@ object Main extends App {
         .count(_ => true)      
     }
 
-    for(all <- List(false, true)) println(s"yes by ${if(all) "all" else "some "} = ${groups.map(countYesAnsweredQuestions(all)).sum}")
+    for(all <- List(false, true)) println(s"yes by ${if(all) "all " else "some"} = ${groups.map(countYesAnsweredQuestions(all)).sum}")
   }
 }
