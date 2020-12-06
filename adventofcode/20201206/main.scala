@@ -7,10 +7,10 @@ object Main extends App {
     def countYesAnsweredQuestions(all:Boolean)(group:String):Int = {
       group.split("\n")
         .map(_.split("").toSet)
-        .reduce((a, b) => if(all) a.union(b) else a.intersect(b))
+        .reduce((a, b) => if(all) a.intersect(b) else a.union(b))
         .count(_ => true)      
     }
 
-    for(all <- List(false, true)) println(s"yes by ${if(all) "some" else "all "} = ${groups.map(countYesAnsweredQuestions(all)).sum}")
+    for(all <- List(false, true)) println(s"yes by ${if(all) "all" else "some "} = ${groups.map(countYesAnsweredQuestions(all)).sum}")
   }
 }
