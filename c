@@ -1,0 +1,1 @@
+cd adventofcode/202012$1
