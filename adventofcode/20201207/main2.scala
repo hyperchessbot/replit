@@ -1,4 +1,6 @@
 object Main extends App {
+  val requiredColor = "shiny gold"
+  
   for(input <- List("example", "example2", "input")){    
     println(s"\nfor '$input' :\n")
 
@@ -28,10 +30,8 @@ object Main extends App {
 
     val rules = scala.io.Source.fromFile(s"$input.txt").getLines.filter(!_.contains("contain no other")).map(Rule(_)).map(rule => rule.color.color -> rule).toMap
 
-    val requiredColor = "shiny gold"
-
     def canContain(color:String):Int = {
-      var colors = Set[String](requiredColor)      
+      var colors = Set[String](color)      
       for((_, _) <- rules){                
         for((key, rule) <- rules){       
           for((testColor, _) <- rule.contains){
