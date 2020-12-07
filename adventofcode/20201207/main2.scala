@@ -12,12 +12,13 @@ object Main extends App {
         parts = parts.tail
       }
       val color = parts.mkString(" ")
+      def tuple = color -> this
     }
 
     case class Rule(ruleStr:String){
       val parts = ruleStr.split(" contain |, ")
       val color = Color(parts(0)).color
-      val contains = parts.tail.map(Color(_)).map(color => color.color -> color).toMap      
+      val contains = parts.tail.map(Color(_).tuple).toMap   
       def mustContain(rules:Map[String, Rule]):Int = {
         var sum = 0
         for((key, color) <- contains){
@@ -26,9 +27,10 @@ object Main extends App {
         }
         sum
       }
+      def tuple = color -> this
     }
 
-    val rules = scala.io.Source.fromFile(s"$input.txt").getLines.filter(!_.contains("contain no other")).map(Rule(_)).map(rule => rule.color -> rule).toMap
+    val rules = scala.io.Source.fromFile(s"$input.txt").getLines.filter(!_.contains("contain no other")).map(Rule(_).tuple).toMap
 
     def canContain(color:String):Int = {
       var colors = Set[String](color)      
