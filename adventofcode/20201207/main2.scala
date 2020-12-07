@@ -32,11 +32,11 @@ object Main extends App {
 
     def canContain(color:String):Int = {
       var colors = Set[String](requiredColor)      
-      for((key, rule) <- rules){                
+      for((_, _) <- rules){                
         for((key, rule) <- rules){       
           for((testColor, _) <- rule.contains){
             if(colors.contains(testColor)){
-              colors = colors.union(Set(rule.color.color))
+              colors += key
             }
           }          
         }
