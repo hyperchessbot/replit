@@ -40,14 +40,10 @@ object Main extends App {
           var aggr = Set[Int]()
           for(target <- examine){            
             if(targets.contains(target)){
-              val froms = targets(target)              
-              for(from <- froms){
-                if(allNodes.contains(from)){
-                  allNodes -= from
-                  aggr += from
-                  backwardSet += from
-                }
-              }
+              val froms = targets(target).intersect(allNodes)              
+              allNodes = allNodes -- froms
+              aggr = aggr.union(froms)
+              backwardSet = backwardSet.union(froms)
             }
           }
           examineRec(aggr)
