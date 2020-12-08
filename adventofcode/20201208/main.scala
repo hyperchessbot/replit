@@ -1,4 +1,13 @@
 object Main extends App {
+  //http://biercoff.com/easily-measuring-code-execution-time-in-scala/
+  def time[R](block: => R): R = {
+    val t0 = System.nanoTime()
+    val result = block    // call-by-name
+    val t1 = System.nanoTime()
+    println("Elapsed time: " + (t1 - t0)/1000 + "ms")
+    result
+  }
+
   for(input <- List("example", "input")){    
     println(s"\nfor '$input' :\n")
 
@@ -16,8 +25,7 @@ object Main extends App {
       var acc = 0
       var line = 0
       var targets = scala.collection.mutable.Map[Int, Set[Int]]()
-      def buildTargets():Unit = {        
-        println("building targets")
+      def buildTargets():Unit = {                
         for(i <- 0 until instructions.length){
           val ins = instructions(i)
           ins.index = i
@@ -31,7 +39,10 @@ object Main extends App {
           if(targets.contains(target)) targets(target) = targets(target) + i else targets(target) = Set(i)
         }        
       }
-      buildTargets()
+      time{
+        println("building targets")
+        buildTargets()
+      }      
       var backwardSet = Set[Int]()
       def buildBakcwardSet():Unit = {
         var allNodes = (0 until instructions.length).toSet
@@ -50,7 +61,10 @@ object Main extends App {
         }
         examineRec(Set(instructions.length))
       }
-      buildBakcwardSet()      
+      time{
+        println("building backward set")
+        buildBakcwardSet()      
+      }      
       def terminated:Boolean = line >= instructions.length
       def step():Boolean = {        
         if(terminated) return false
@@ -103,18 +117,24 @@ object Main extends App {
 
     machine.reset()
 
-    while(!machine.terminated){
-      machine.reset()
-      machine.revert = machine.revert + 1
-      machine.run() 
+    time{
+      println("revert naive")
+      while(!machine.terminated){
+        machine.reset()
+        machine.revert = machine.revert + 1
+        machine.run() 
+      }
     }
 
     println(machine.acc, machine.revert)
 
-    machine.reset()
-    machine.revert = -1
-    machine.flip = true
-    machine.run()
+    time{
+      println("revert backward set")
+      machine.reset()
+      machine.revert = -1
+      machine.flip = true
+      machine.run()
+    }
 
     println(machine.acc, machine.revert)
   }
