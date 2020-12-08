@@ -1,0 +1,11 @@
+Let C be the initial set of commands. We can compute the set WINNING of positions that will eventually lead to a victory (in C) in O(N) time.
+
+Now suppose we are looking at some modified command set C', where we have changed some position i from jmp to nop (or vice versa). Let j be the position after executing the (modified) line i. I claim that (Lemma 1) j leads to victory in C' if and only if j leads to victory in C. This means we only need to check in j is in WINNING.
+
+So, we can just follow along C; every time we see a nop or jmp, change it to the other instruction and see if that lands you in WINNING. If so, finish out the rest of the alg and return acc. If not, proceed without modifying the command. This part of the algorithm also takes O(N).
+
+Finally, let me prove Lemma 1.
+
+Suppose j leads to victory in C'. If j eventually leads back to i (in C'), we are in an infinite loop. Therefore, the path from j to victory in C' does not include i. Hence, this path is unchanged between C and C', so j also leads to victory in C.
+
+Suppose j leads to victory in C. If j leads to i (in C), then i also leads to victory in C. But this is impossible since i is part of the initial infinite loop in C. Therefore, j's path to victory does not include i. Proceeding as in the previous case, we conclude that j also leads to victory in C'. (Note that we weren't able to use the exact same argument as the previous case, because i doesn't necessarily lead to j in C!)
