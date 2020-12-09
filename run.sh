@@ -1,3 +1,3 @@
-cd adventofcode/20201208
+cd adventofcode/20201209
 
 bash run.sh
