@@ -1,9 +1,4 @@
-object Main extends App {
-  implicit class Combinations(n: Int) {
-    private def fact(n: Int): Int = (1 to n).foldLeft(1)(_ * _)
-    def ! = fact(n) // allows 10!
-    def choose(k: Int): Int = fact(n) / (fact(n - k) * fact(k))
-  }
+object Main extends App {  
   for(input <- List("example", "example2", "input")){    
     println(s"\nfor '$input' :\n")
 
@@ -18,16 +13,13 @@ object Main extends App {
 
     println(ones, threes, ones * threes)
 
-    def vars(pocket:Int):Long = {
-      if(pocket == 1) return 2
-      if(pocket == 2) return 4
-      if(pocket == 3) return 7
-      println(s"sorry, no vars for $pocket")
-      System.exit(1)
-      1
+    def vars(pocketSize:Int):Long = {
+      val trib = List(1,1,2,4,7)
+
+      return trib(pocketSize)
     }
 
-    val pockets = diffs.map(_.toString).mkString.split("3").filter(_.length > 1).map(_.length - 1).toList
+    val pockets = diffs.map(_.toString).mkString.split("3").map(_.length).toList
 
     println(pockets)
     println(pockets.map(vars(_)).reduce(_ * _))
