@@ -1,63 +1,48 @@
+use cached::cached_key;
+use cached::SizedCache;
+use std::collections::HashSet;
 use std::{env, fs};
 
-fn outcast(records: &[usize], preamble: usize) -> usize {
-    let mut pair_sums: Vec<usize> = vec![];
-    for (idx, num1) in records[..preamble - 1].iter().enumerate() {
-        for num2 in records[idx + 1..preamble].iter() {
-            pair_sums.push(num1 + num2)
+cached_key! {
+    VALID_ARRS: SizedCache<usize, usize> = SizedCache::with_size(200);
+    Key = start;
+    fn valid_arrs(jolts: &HashSet<usize>, start: usize, end: &usize) -> usize = {
+        if start == *end {
+            return 1;
         }
-    }
-
-    let max_checks: usize = (preamble * (preamble - 1)) / 2;
-    for (idx, num) in records[preamble..].iter().enumerate() {
-        if pair_sums.contains(num) {
-            let _ = pair_sums.drain(..preamble - 1);
-            let (mut curr, mut shift) = (preamble - 2, preamble - 2);
-            loop {
-                pair_sums.insert(curr, records[idx + preamble - 1 - shift] + num);
-                if curr == max_checks - 1 {
-                    break;
-                }
-                curr += shift;
-                shift -= 1;
+        let mut output = 0usize;
+        for jolt in start + 1..=start + 3 {
+            if jolts.contains(&jolt) {
+                output += valid_arrs(jolts, jolt, end);
             }
-        } else {
-            return *num;
         }
+        output
     }
-    0
-}
-
-fn subsum(records: &[usize], target: usize) -> usize {
-    let (mut start, mut total) = (0usize, 0usize);
-    for (idx, num) in records.iter().enumerate() {
-        total += num;
-
-        while total > target {
-            total -= records[start];
-            start += 1;
-        }
-        if total == target {
-            return records[start..=idx].iter().max().unwrap()
-                + records[start..=idx].iter().min().unwrap();
-        }
-    }
-    0
 }
 
 fn main() {
-    let records: Vec<usize> = fs::read_to_string("./src/bin/day09/input")
+    let mut records: Vec<usize> = fs::read_to_string("./src/bin/day10/input")
         .unwrap()
         .split('\n')
         .map(|num| num.parse().unwrap())
         .collect();
+    records.sort_unstable();
+    let jolts: HashSet<usize> = records.iter().cloned().collect();
 
-    let target = outcast(&records, 25);
-    let args: Vec<String> = env::args().collect();
-
-    match args[1].as_str() {
-        "1" => println!("{}", target),
-        "2" => println!("{}", subsum(&records, target)),
+    match env::args().nth(1).unwrap().as_str() {
+        "1" => {
+            let mut diff1 = (records[0] == 1) as usize;
+            let mut diff3 = 1usize;
+            for i in 1..records.len() {
+                if records[i] - records[i - 1] == 1 {
+                    diff1 += 1
+                } else if records[i] - records[i - 1] == 3 {
+                    diff3 += 1
+                }
+            }
+            println!("{}", diff1 * diff3);
+        }
+        "2" => println!("{}", valid_arrs(&jolts, 0, records.last().unwrap())),
         _ => println!("Only two puzzles daily!"),
     }
 }
